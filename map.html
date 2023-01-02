@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<title>south korea emergy permitting</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- 
+		THESE ARE CALLS TO DIFFERENT EXTERNAL FILES
+		MAPBOX HAS A JAVASCRIPT LIBRARY THAT YOU NEED
+		THE NEXT IS A CSS FILE FOR THE MAP
+		AND THE FINAL ONE IS THE LIBRARY FOR JQUERY, WHICH I USE FOR THE PULLDOWN MENU.
+	-->
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<!-- 
+		THESE ARE CSS STYLES WHICH YOU SHOULD FREELY PLAY WITH
+		THE STYLES THAT BEGIN WITH # RELATE TO IDS, 
+		THE ONES THAT BEGIN WITH . RELATE TO CLASSES
+		WHEN YOU GOT EVERYTHING WORKING YOU CAN PLAY WITH THESE AND ADD TO THESE 
+		TO MAKE YOUR FONTS AND LAYOUTS NICE AND LOVELY
+	-->
+
+	<style>
+		::-webkit-scrollbar {
+			width: 0px;
+			/* remove scrollbar space */
+			background: transparent;
+			/* optional: just make scrollbar invisible */
+		}
+
+		.info {
+			padding: 6px 8px;
+			font: 14px/16px Arial, Helvetica, sans-serif;
+			background: white;
+			background: rgba(255, 255, 255, 0.8);
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+			border-radius: 5px;
+			margin: auto;
+		}
+
+		.info h4 {
+			margin: auto;
+			color: rgb(206, 0, 0);
+		}
+
+		.legend {
+			text-align: left;
+			line-height: 18px;
+			color: #555;
+		}
+
+		.legend i {
+			width: 18px;
+			height: 18px;
+			float: left;
+			margin: auto;
+			opacity: 0.7;
+		}
+
+		.main_text {
+			/* display: flex; */
+			max-width: 700px;
+			min-width: 100px;
+			margin-left: auto;
+			margin-right: auto;
+			font-family: Helvetica, sans-serif;
+			font-size: 1.21em;
+			font-weight: 120;
+			line-height: 135%;
+		}
+
+		.desc {
+			display: flex;
+			max-width: 1100px;
+			min-width: 100px;
+			margin-top: 0;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 40px;
+			font-family: Helvetica, sans-serif;
+			font-size: 0.95em;
+			font-weight: 100;
+			font-style: italic;
+		}
+
+		#datawrapper-chart-bQq4R {
+			position: flex;
+			margin: auto;
+		}
+
+		#select-menu {
+			position: absolute;
+			left: 50px;
+			top: 10px;
+			z-index: 10;
+		}
+
+		#headPlace {
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			z-index: 10;
+			padding: 10px;
+			width: 200px;
+			background-color: #a5a5a5;
+		}
+
+		#map_area {
+			display: flex;
+			height: calc(100vh - 60px);
+			/* overflow: scroll; */
+			max-width: 1100px;
+			margin: auto;
+			margin-top: 50px;
+			margin-bottom: 10px;
+		}
+
+		#map {
+			flex: 1;
+			height: calc(100vh - 60px);
+			width: 650px;
+			margin-right: 40px;
+		}
+		
+
+		#articlePlace {
+			flex: 0.5;
+			height: calc(100vh - 120px);
+			width: 300px;
+			background-color: rgba(229, 229, 229, 0.741);
+			padding: 30px;
+			white-space: pre-line;
+			font-family: Arial, Helvetica, sans-serif;
+			line-height: 150%;
+		}
+
+		#title {
+			display: flex;
+			max-width: 700px;
+			min-width: 100px;
+			font-family: Georgia, 'Times New Roman', Times, serif;
+			font-size: 2.4em;
+			font-weight: bold;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 0;
+			text-align: left;
+			padding-top: 40px;
+			padding-bottom: 10px;
+		}
+
+		#deck {
+			display: flex;
+			max-width: 700px;
+			min-width: 100px;
+			margin-top: 0;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: left;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 1.45em;
+			font-weight: 50;
+			padding-top: 0;
+			color: rgb(87, 87, 87);
+		}
+
+		#byline {
+			display: flex;
+			max-width: 700px;
+			min-width: 100px;
+			margin: 0 auto;
+			text-align: left;
+			font-family: Helvetica, sans-serif;
+			font-size: 0.9em;
+			font-weight: 100;
+		}
+
+	</style>
+
+</head>
+<!-- THE BODY OF THE HTML BEGINS HERE -->
+
+<body>
+
+
+
+	<!-- 
+		THE DIVS BELOW ARE SUPER IMPORTANT:
+		THEY ARE WHERE THE MAP WILL GO, AND YOUR ARTICLE TEXT WILL GO
+		YOU WILL CERTAINLY WANT TO STYLE THESE, BOTH THEIR PLACEMENT AND CONTENT 
+		THE MAP SHOULD BE EMPTY.
+		WHATEVER INTRODUCTORY TEXT YOU WANT CAN GO INTO THE ARTICLEPLACE DIV
+	-->
+
+	<div id="title">
+		<p style="margin: 0;">Two Decades of South Korea's Energy Permitting, in One Chart</p>
+	</div>
+
+	<div id="deck">
+		<p style="margin: 0;">Permitting is where the energy transition begins. Is South Korea on track to meet its clean-energy goals?</p>
+	</div>
+
+	<div id="byline">
+		<p>By Minju Kim | Dec. 15, 2022 </p>
+	</div>
+
+	<hr style="margin-left:auto; margin-right:auto; margin-bottom:35px; width: 700px; background-color: rgb(113, 113, 113);">
+
+	<!-- <img 
+		src="offshore_wind.jpeg"
+		style="margin: 0 auto; display: flex; max-width: 700px; min-width: 100px; "> -->
+
+	<div class="main_text">
+		<p>In order to gauge the future of the climate, one needs to take a close look at energy permitting. Permitting is where lofty climate goals and easy promises are stripped away, exposing the bare face of a country’s commitment to clean energy transition. For South Korea, the past two decades of permitting history reveal notable progress, but some experts believe it still falls short of what is needed to achieve its 2050 net zero goal.</p>
+		<p>South Korea, smaller in size than many of its peer countries, plays an outsized role in climate change due to its heavy coal imports and high per-capita emissions. <a href="https://datacommons.org/place/country/KOR?utm_medium=explore&mprop=amount&popt=Emissions&cpv=emittedThing%2CCarbonDioxide&hl=en">At almost 12 tons,</a> Korea ranks 15th in the world for per-capita emissions, according to the data from World Bank.</p>
+		<p>The following graph illustrates South Korea’s permitting history since 2002, the year Korea Electricity Regulatory Commission (KOREC) was first established. KOREC is a governmental agency under the Ministry of Trade, Industry, and Energy, and oversees all energy projects bigger than 3 MW.</p>
+		<p>The data, obtained from the <a href="https://korec.go.kr">KOREC website,</a> was converted from a pdf document into a searchable database format, which was then cleaned and analyzed for further exploration. The data only shows newly obtained permits and the capacity of the plant at the time of the approval. It may not reflect the changes made after the initial permit, such as changes in capacity, location, ownership, and energy source.</p>
+	</div>
+
+	<iframe
+		title="South Korea's permitting trends show glimpse of its energy future"
+		aria-label="Interactive area chart"
+		id="datawrapper-chart-bQq4R"
+		src="https://datawrapper.dwcdn.net/bQq4R/2/"
+		scrolling="no"
+		frameborder="0"
+		style="width: 0; min-width: 70%; display: block; margin: 0 auto !important; border: none; padding-top: 20px; padding-bottom: 20px;"
+		height="600"
+		data-external="1">
+	</iframe>
+	
+	<div class="main_text">
+		<p>The graph reveals that while there was a dramatic increase in renewable energy permitting in the past decade, fossil fuel plants still persist, complicating the picture of Korea’s clean-energy transition. While there has been no new coal permits since 2015, several new gas plants have been permitted. Wind farms, which were negligible up until 2016, gained significant capacity since then, being the most permitted power source in 2022 so far.<p>
+		<p>In 2021, Solutions for Our Climate and Korea Advanced Institute of Science & Technology (KAIST) published <a href="https://forourclimate.org/hubfs/%5BSFOC%5D%202050%20Carbon-Neutrality%20Transition%20Scenario_Final.pdf.pdf">a joint report </a> that laid out multiple scenarios for Korea to achieve its net-zero goals. The report suggested that in order to achieve carbon neutrality by 2050, Korea needs to increase its flexible resource power generation “by 150% and 250%, respectively, between 2020 and 2050.”</p>
+	</div>
+
+	<div id="map_area">
+		<div id='map'>
+			<div id="dropdown">
+				<select id="select-menu">
+					<option value="">All Groups</option>
+				</select>
+			</div>
+			<div id='headPlace'> Rollover to get info</div>
+		</div>
+		
+		<div id='articlePlace'> 
+			<p style="margin-bottom: 0; margin-top: 0;">Click on the circle on the map to get more about the plants.</p>
+			<p style="margin-top: 0;">You can select energy source from the dropdown menu.</p>
+		</div>
+	</div>
+
+	<p class="desc">The size of each point reflects logarithmic scale of each plant's generation capacity. The data shows newly obtained permits and the capacity of the plant at the time of the approval.</p>
+
+	<div class="main_text">
+		<p>While KOREC’s permitting records are meaningful indicators of Korea’s energy future, their usefulness as predictors of renewable energy increase may vary. In solar, for example, the increase in permits was roughly followed by an increase in generation over the past decade, with a 2-3 year delay<p>
+		<p>However, wind power permits, which have dramatically increased in the past decade, did not show the same trend. While KOREC’s yearly wind permits have been steady at above the 2GW range, the new generation capacity for wind has been negligible.</p>
+	</div>
+
+	<iframe 
+		title="Permitting lead to dramatic solar growth, but not for wind." 
+		aria-label="Split Bars" 
+		id="datawrapper-chart-nXB6H" 
+		src="https://datawrapper.dwcdn.net/nXB6H/1/" 
+		scrolling="no" 
+		frameborder="0" 
+		style="width: 0; min-width: 55%; display: block; margin: 0 auto !important; border: none; padding-top: 20px; padding-bottom: 20px;"
+		height="750" 
+		data-external="1">
+		</iframe>
+	
+	<div class="main_text">
+		<p>“Compared to solar, wind power has many more hoops to jump through when it comes to permitting, especially around land use,” said Eunbyul Jo, a renewable energy researcher at the South Korea-based think tank Solutions for Our Climate. “Aside from KOREC’s energy business permit, wind, specifically offshore wind, needs to comply with Public Waters Management And Reclamation Act.”<p>
+		<p>The act requires offshore wind projects to gain land use permission, which often gets delayed by several years due to opposition from nearby fisheries and some environmental activists who are concerned about the impact of the wind turbine on the ecosystem. Some wind projects have been put on hold for more than a decade due to the complex permitting process.</p>
+		<p>Despite the slow growth in wind generation, Jo says a recent KOREC permit for wind is a positive sign for the industry. “While KOREC’s permitting is only a piece of the puzzle, it is a big one,” she said. “We just need to streamline other permitting processes to really boost wind capacity in Korea.”</p>
+	</div>
+
+	<div style="margin-bottom: 80px;"></div>
+
+	<hr style="margin-left:auto; margin-right:auto; margin-bottom:10px; width: 700px; background-color: rgb(113, 113, 113);">
+
+	<p class="desc" style="max-width: 700px;">A few data points in the map may be misplaced due to inaccurate result of the geocoding API used for this project. If you find any disprepency in the data, please email: minju.kim@columbia.edu</p>
+
+	<div style="margin-bottom: 60px;"></div>
+
+	<script 
+		type="text/javascript">!function(){"use strict";
+		window.addEventListener("message",(function(e){if(void 0!==e.data["datawrapper-height"]){var t=document.querySelectorAll("iframe");for(var a in e.data["datawrapper-height"])for(var r=0;r<t.length;r++){if(t[r].contentWindow===e.source)t[r].style.height=e.data["datawrapper-height"][a]+"px"}}}))}();
+	</script>
+
+	<!-- 
+		INSIDE THE MAP DIV  ARE TWO THINGS, THE HEADLINE AND THE DROP-DOWN MENU
+
+
+		DROP-DOWN MENU: THE ID select–menu IS USED BY THE JQUERY FUNCTION WAY DOWN AT THE BOTTOM
+		THIS HTML SETS UP THE PULLDOWN MENU
+		IF YOU HAVE MULTIPLE GROUPS THE JQUERY AT THE BOTTOM 
+		WILL UPDATE THE SELECT MENU FOR YOU
+
+		HEADLINE: NOTE, YOU CAN USE THE STABLE DIV TO SHOW THE HEADLINE
+		OR POP-UPS. IN THIS TEMPLATE THE POP-UPS ARE COMMENTED OUT
+		YOU CAN UN-COMMENT THEM TO MAKE THEM ACTIVE.
+	-->
+
+	<!-- 
+		THIS IS WHERE THE BROWSER LOADS IN YOUR GEOJSON INFORMATION
+		MAKING IT A JAVASCRIPT FILE .js, RATHER THAN A GEOJSON FILE
+		ALLOWS YOU TO LOAD IT LOCALLY WITHOUT DEALING WITH SETTING UP SERVERS ON YOUR MACHINE.
+	-->
+
+	<script type="text/javascript" src="geo-data12-11-12am.js"></script>
+
+	<!-- 
+		HERE IS THE SCRIPT THAT MANAGES THE DATAWRAPPER IFRAME
+	-->
+
+	<script type="text/javascript">
+		!function() {
+			"use strict";
+			window.addEventListener("message", (
+				function(e){
+					if(void 0!==e.data["datawrapper-height"]) {
+						var t=document.querySelectorAll("iframe");
+						for (var a in e.data["datawrapper-height"]) {
+							for (var r=0;r<t.length;r++) {
+								if(t[r].contentWindow===e.source)
+									t[r].style.height=e.data["datawrapper-height"][a]+"px"
+							}
+						}
+					}
+				}
+			))
+		}();
+	</script>
+
+	<!-- 
+		HERE BEGINS ALL THE SCRIPT THAT SETS UP THE MAP 
+		ALL THE COMMENTS FROM HERE WE'LL BE IN JAVASCRIPT COMMENTS //
+	-->
+
+	<script type="text/javascript">
+		// these seven lines maybe the only lines you need to edit
+		// you should put in your own access token
+		// you can change the style of the tiles
+		// as well as the center and the zoom
+
+		// but note that way down below this is a method that auto centers and zooms:
+		// map.fitBounds(turf.bbox(infoData), { padding: 120, linear: true })
+		//If you want to control the centering and zoom yourself, comment out that line.
+
+		mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+		var map = new mapboxgl.Map({
+			container: 'map', // HTML container ID
+			style: 'mapbox://styles/mapbox/light-v11', // style URL
+			center: [127.70394353542594, 36.39972964837658], // starting position as [lng, lat], this is set on Iceland, fix it!!
+			zoom: 6.7, //zoom runs from 0-22, this randomly in the middle, lines 297-298 auto center and zoom
+			projection: 'naturalEarth' //nice to have this, you could comment out this line if you are Zoomed in
+
+		});
+		map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+
+		// all of this JavaScript manages what's displayed on hover and click
+		var popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
+
+		let hoverCurrentId = null
+		var datalayer;
+
+		function updateArticle(e) {
+			let feature = e.features[0]
+			document.getElementById("articlePlace").innerHTML = feature.properties.article
+		}
+		function updateHead(e) {
+			let feature = e.features[0]
+			map.getCanvas().style.cursor = 'pointer';
+			document.getElementById("headPlace").innerHTML = feature.properties.headline
+
+		}
+		function removeHead(e) {
+			document.getElementById("headPlace").innerHTML = "&nbsp;"
+			map.getCanvas().style.cursor = '';
+
+		}
+
+		function startHover(e) {
+			let feature = e.features[0]
+
+			if (hoverCurrentId) {
+				map.setFeatureState({ source: 'datalayer', id: hoverCurrentId }, { hover: false });
+			}
+			hoverCurrentId = feature.id
+			map.setFeatureState({ source: 'datalayer', id: hoverCurrentId }, { hover: true });
+		}
+
+		function stopHover(e) {
+			if (hoverCurrentId) {
+				map.setFeatureState({ source: 'datalayer', id: hoverCurrentId }, { hover: false });
+			}
+			hoverCurrentId = null;
+		}
+
+		function drawPopup(e) {
+			let feature = e.features[0]
+			map.getCanvas().style.cursor = 'pointer';
+
+			var coordinates = feature.geometry.coordinates.slice();
+			var headline = feature.properties.headline;
+
+			while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+				coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+			}
+
+			popup.setLngLat(coordinates)
+				.setHTML(`<h4>${headline}</h4>`)
+				.addTo(map);
+		}
+
+		function removePopup(e) {
+			map.getCanvas().style.cursor = '';
+			popup.remove();
+		}
+
+		map.on('load', function () {
+			for (let i = 0; i < infoData.features.length; i++) {
+				infoData.features[i]['id'] = i + 1
+			}
+			// the JavaScript below sets up the styles of the colors based on your properties
+			// color, radius, and rating
+
+			// Soma's explanation of 'paint': https://gist.github.com/jsoma/c91cfa7a1f4f8346d95ac2a907f0cb0c
+
+			datalayer = map.addLayer({
+				id: "datalayer",
+				type: "circle",
+				source: {
+					type: "geojson",
+					data: infoData,
+				},
+				paint: {
+					'circle-radius': ['to-number', ['get', 'radius']],
+					'circle-stroke-color': 'white',
+					'circle-stroke-width': 0.7,
+					'circle-color': [
+						// 'case',
+						// ['boolean', ['feature-state', 'hover'], false],
+						'match',
+						['get', 'group_id'],
+						1, '#09bb9f',
+						2, '#387a94',
+						3, '#ff5e4b',
+						4, '#ca88e5',
+						5, '#c4c4c4',
+						6, '#82f5cf',
+						7, '#fbc355',
+						8, '#87dbef',
+						'#ccc',
+						// ['get', 'color'],
+					],
+					'circle-opacity': [
+						'case',
+						['boolean', ['feature-state', 'hover'], false],
+						1,
+						0.5
+					]
+				}
+			});
+			// these functions control Mouse actions
+			// they make the pop-up headline or update the article text
+			// When we move the mouse over, draw the popup and change the hover style
+			map.on('mouseenter', 'datalayer', function (e) {
+				startHover(e)
+				// uncomment this line to get pop-ups
+				// drawPopup(e)
+				updateHead(e)
+			});
+
+			// When we move the mouse away from a point, turn off the hovering and popup
+			map.on('mouseleave', 'datalayer', function (e) {
+				stopHover(e)
+				// uncomment this line to get pop-ups
+				// removePopup(e)
+				removeHead(e)
+			});
+
+			// When we click, update the article (the right-hand side)
+			map.on('click', 'datalayer', function (e) {
+				updateArticle(e)
+			})
+
+			// very important!! this automatically centers the map and zooms it
+
+			// var bounds = new mapboxgl.LngLatBounds();
+
+			infoData.features.forEach(function(feature) {
+				bounds.extend(feature.geometry.coordinates);
+			});
+
+			map.fitBounds(bounds,{ padding: 120, linear: true }); //padding is needed for natural earth projection
+		})
+
+
+	</script>
+	<script>
+		// this part is J query / with some mapbox JavaScript
+		// it changes what is displayed based on the pulldown menu
+		var groupsObj = {};
+
+		$(document).ready(function () {
+			infoData.features.forEach(function (feature) {
+				groupsObj[feature.properties.group_id] = feature.properties.group_name;
+			})
+
+			$.each(groupsObj, function (key, value) {
+				$('#select-menu')
+					.append($("<option></option>")
+						.attr("value", value)
+						.text(value));
+			});
+
+			$('#select-menu').change(function () {
+				var selectedGroup = $('#select-menu').val();
+
+				if (!selectedGroup) {
+					map.setFilter('datalayer', null);
+				} else {
+					map.setFilter('datalayer', ['==', ['get', 'group_name'], selectedGroup]);
+				}
+			});
+		});
+	</script>
+
+
+</body>
+
+</html>
