@@ -389,7 +389,8 @@ p.caption {
 
 #map_area {
     display: flex;
-    height: calc(100vh - 60px);
+    /* height: calc(100vh - 60px); */
+    height: 1000px;
     /* overflow: scroll; */
     max-width: 1100px;
     margin: auto;
@@ -399,7 +400,8 @@ p.caption {
 
 #map {
     flex: 1;
-    height: calc(100vh - 60px);
+    /* height: calc(100vh - 60px); */
+    height: 1000px;
     width: 650px;
     margin-right: 40px;
 }
@@ -407,7 +409,8 @@ p.caption {
 
 #articlePlace {
     flex: 0.5;
-    height: calc(100vh - 120px);
+    /* height: calc(100vh - 120px); */
+    height: 940px;
     width: 300px;
     background-color: rgba(229, 229, 229, 0.741);
     padding: 30px;
@@ -455,4 +458,31 @@ p.caption {
     font-family: Helvetica, sans-serif;
     font-size: 0.9em;
     font-weight: 100;
+}
+
+/* These are the styles for ai2html */
+
+#g-stream_ai2html_svg-Artboard_1,
+#g-stream_ai2html_svg-Artboard_2
+ {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    #g-stream_ai2html_svg-Artboard_2 {
+        display: block;
+    }
+}
+
+/* @media (min-width: 550px) and (max-width: 800px) {
+    #g-bemidji-radial-tablet,
+    #g-iceridge-tablet {
+        display: block;
+    }
+} */
+
+@media (min-width: 480px) {
+    #g-stream_ai2html_svg-Artboard_1 {
+        display: block;
+    }
 }
