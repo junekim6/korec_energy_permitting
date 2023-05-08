@@ -72,7 +72,7 @@
 		<p class="body-text serif">In 2021, Solutions for Our Climate and Korea Advanced Institute of Science & Technology (KAIST) published <a href="https://forourclimate.org/hubfs/%5BSFOC%5D%202050%20Carbon-Neutrality%20Transition%20Scenario_Final.pdf.pdf">a joint report </a> that laid out multiple scenarios for Korea to achieve its net-zero goals. The report suggested that in order to achieve carbon neutrality by 2050, Korea needs to increase its flexible resource power generation “by 150% and 250%, respectively, between 2020 and 2050.”</p>
 	</section>
 
-	<!-- <div id="map_area">
+	<div id="map_area">
 		<div id='map'>
 			<div id="dropdown">
 				<select id="select-menu">
@@ -88,7 +88,7 @@
 		</div>
 	</div>
 
-	<p class="desc">The size of each point reflects logarithmic scale of each plant's generation capacity. The data shows newly obtained permits and the capacity of the plant at the time of the approval.</p> -->
+	<p class="desc">The size of each point reflects logarithmic scale of each plant's generation capacity. The data shows newly obtained permits and the capacity of the plant at the time of the approval.</p>
 
 	<section class="story-body">
 		<p class="body-text serif">While KOREC’s permitting records are meaningful indicators of Korea’s energy future, their usefulness as predictors of renewable energy increase may vary. In solar, for example, the increase in permits was roughly followed by an increase in generation over the past decade, with a 2-3 year delay<p>
@@ -182,13 +182,14 @@
 		// map.fitBounds(turf.bbox(infoData), { padding: 120, linear: true })
 		//If you want to control the centering and zoom yourself, comment out that line.
 
-		mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+		mapboxgl.accessToken = 'pk.eyJ1IjoianVubWtpbSIsImEiOiJjbGgzcHQwdXAwM2pwM2tvZnA5NTdldzA4In0.HxjMS_y_zJ-MG_Q4-uf9ew';
 
 		var map = new mapboxgl.Map({
 			container: 'map', // HTML container ID
 			style: 'mapbox://styles/mapbox/light-v11', // style URL
 			center: [127.70394353542594, 36.39972964837658], // starting position as [lng, lat], this is set on Iceland, fix it!!
 			zoom: 6.7, //zoom runs from 0-22, this randomly in the middle, lines 297-298 auto center and zoom
+ 			minZoom: 6.7,
 			projection: 'naturalEarth' //nice to have this, you could comment out this line if you are Zoomed in
 
 		});
