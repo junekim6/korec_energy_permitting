@@ -472,7 +472,7 @@ p.caption {
 
 @media (max-width: 480px) {
     #g-stream_ai2html_svg-Artboard_2,
-    #g-generation-comparison-mobile {
+    #g-generation-comparison-medium {
         display: block;
     }
 }
