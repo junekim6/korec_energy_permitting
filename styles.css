@@ -463,13 +463,16 @@ p.caption {
 /* These are the styles for ai2html */
 
 #g-stream_ai2html_svg-Artboard_1,
-#g-stream_ai2html_svg-Artboard_2
+#g-stream_ai2html_svg-Artboard_2,
+#g-generation-comparison-medium,
+#g-generation-comparison-mobile
  {
     display: none;
 }
 
 @media (max-width: 480px) {
-    #g-stream_ai2html_svg-Artboard_2 {
+    #g-stream_ai2html_svg-Artboard_2,
+    #g-generation-comparison-mobile {
         display: block;
     }
 }
@@ -482,7 +485,8 @@ p.caption {
 } */
 
 @media (min-width: 480px) {
-    #g-stream_ai2html_svg-Artboard_1 {
+    #g-stream_ai2html_svg-Artboard_1,
+    #g-generation-comparison-medium {
         display: block;
     }
 }
